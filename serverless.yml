@@ -1,0 +1,54 @@
+service: REST-API
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: eu-central-1
+  stage: dev
+  timeout: 300
+  apiKeys:
+    - todoAPI
+
+plugins:
+  - serverless-offline
+
+package:
+  include:
+    - features/**
+    - models/**
+
+functions:
+  getTodo:
+    handler: features/read.getTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: get
+          private: true
+  listTodos:
+    handler: features/read.listTodos
+    events:
+      - http:
+          path: todo
+          method: get
+  createTodo:
+    handler: features/create.createTodo
+    events:
+      - http:
+          path: todo
+          method: post
+          private: true
+  deleteTodo:
+    handler: features/delete.deleteTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: delete
+          private: true
+  updateTodo:
+    handler: features/update.updateTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: patch
+          private: true
